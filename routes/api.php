@@ -17,3 +17,26 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group([
+
+    'middleware' => ['api', 'force.json'],
+    'prefix' => 'auth'
+
+], function () {
+
+    Route::post('login', 'AuthController@login');
+    Route::post('register', 'AuthController@register');
+    Route::post('refresh', 'AuthController@refresh');
+    Route::get('logout', 'AuthController@logout');
+    Route::get('user', 'AuthController@getAuthUser');
+
+});
+
+Route::group([
+
+    'middleware' => ['api', 'force.json'],
+
+], function () {
+    Route::resource('user', 'UserController')->except(['create', 'edit']);
+});
